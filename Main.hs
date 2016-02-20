@@ -51,9 +51,11 @@ findCombination :: (Resistor -> Resistor -> Float)      -- ^ f : Function we wan
                     -> Int                              -- ^ Maximum depth of combination (see 'combinations') 
                     -> [Resistor]                       -- ^ List of resistors to combine 
                     -> [(Float, Resistor, Resistor)]    -- ^ Result : [(f r1 r2, r1, r2)]
-findCombination f tar th d rs = sortBy (compare `on` (\(_,r1,r2) -> count r1 + count r2)) $ filter (\(a,_,_)-> abs (a-tar) < th) [(f r1 r2, r1, r2) | r1 <- cs , r2 <- cs]
+findCombination f tar th d rs = getSimplest . threshold $ [(f r1 r2, r1, r2) | r1 <- cs , r2 <- cs]
     where
         cs = combinations rs d
+        threshold = filter (\(a,_,_)-> abs (a-tar) < th)    -- we reject all combinations that are above the threshold (to avoid too much memory usage)
+        getSimplest = sortBy (compare `on` (\(_,r1,r2) -> count r1 + count r2)) -- we sort using the total number of resistors
 
 
 main = mapM_ print $ take 10 $ findCombination (\r1 r2 -> 1 + value r2 / value r1) (20/3.3) 0.001 1 e12

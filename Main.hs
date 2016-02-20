@@ -51,7 +51,7 @@ findCombination :: (Resistor -> Resistor -> Float)      -- ^ f : Function we wan
                     -> Int                              -- ^ Maximum depth of combination (see 'combinations') 
                     -> [Resistor]                       -- ^ List of resistors to combine 
                     -> [(Float, Resistor, Resistor)]    -- ^ Result : [(f r1 r2, r1, r2)]
-findCombination f obj th d rs = sortBy (compare `on` (\(_,r1,r2) -> count r1 + count r2)) $ filter (\(a,_,_)-> abs (a-obj) < th) [(f r1 r2, r1, r2) | r1 <- cs , r2 <- cs]
+findCombination f tar th d rs = sortBy (compare `on` (\(_,r1,r2) -> count r1 + count r2)) $ filter (\(a,_,_)-> abs (a-tar) < th) [(f r1 r2, r1, r2) | r1 <- cs , r2 <- cs]
     where
         cs = combinations rs d
 

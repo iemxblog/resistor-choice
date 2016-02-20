@@ -60,6 +60,5 @@ findCombination f tar th d rs = getSimplest . threshold $ [(f r1 r2, r1, r2) | r
 
 main = mapM_ print $ take 10 $ findCombination (\r1 r2 -> 1 + value r2 / value r1) (20/3.3) 0.001 1 e12
     where
-        --e12 = map Resistor $ b ++ map (*10) b   -- we take 2 decades (from 1.0 to 82.0) (if we take more, calculation is too long)
         b = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2]  -- base list of E12 values
         e12 = map Resistor $ concat [map (*10**i) b | i <- [0..6]]

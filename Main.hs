@@ -58,7 +58,8 @@ findCombination f tar th d rs = getSimplest . threshold $ [(f r1 r2, r1, r2) | r
         getSimplest = sortBy (compare `on` (\(_,r1,r2) -> count r1 + count r2)) -- we sort using the total number of resistors
 
 
-main = mapM_ print $ take 10 $ findCombination (\r1 r2 -> 1 + value r2 / value r1) (20/3.3) 0.001 1 e12
-    where
-        b = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2]  -- base list of E12 values
-        e12 = map Resistor $ concat [map (*10**i) b | i <- [0..6]]
+e12 :: [Resistor]
+e12 = map Resistor $ concat [map (*10**i) b | i <- [0..6]]
+    where b = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2]  -- base list of E12 values
+
+main = mapM_ print $ take 10 $ findCombination (\r1 r2 -> value r2 / (value r1 + value r2)) 0.0062 0.000001 1 e12
